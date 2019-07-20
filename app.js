@@ -23,17 +23,17 @@ const newPost = new Post({
   content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fringilla phasellus faucibus scelerisque eleifend donec. Fermentum dui faucibus in ornare quam viverra orci. Metus vulputate eu scelerisque felis imperdiet proin. Varius quam quisque id diam vel quam elementum pulvinar. Et netus et malesuada fames ac turpis egestas maecenas. Phasellus egestas tellus rutrum tellus pellentesque eu. Ut consequat semper viverra nam libero. Risus feugiat in ante metus dictum at tempor commodo ullamcorper. Volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. Nunc sed augue lacus viverra vitae. Arcu cursus vitae congue mauris rhoncus aenean vel elit.'
 });
 
-newPost.save((err) => {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('New post saved to DB');
-  }
-});
+// newPost.save((err) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('New post saved to DB');
+//   }
+// });
 
 const homeStartingContent = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nam libero justo laoreet sit amet cursus. Ipsum suspendisse ultrices gravida dictum. Odio ut enim blandit volutpat. Risus nec feugiat in fermentum posuere urna. Eget nullam non nisi est sit amet facilisis magna. Bibendum est ultricies integer quis auctor elit. Massa id neque aliquam vestibulum morbi blandit cursus risus at. A scelerisque purus semper eget duis at tellus at urna. Donec ultrices tincidunt arcu non sodales neque. Fames ac turpis egestas maecenas pharetra convallis posuere morbi leo. Lectus urna duis convallis convallis tellus id interdum velit. Viverra justo nec ultrices dui. Nec ultrices dui sapien eget mi proin sed libero enim. Nec ultrices dui sapien eget mi proin sed libero enim. Libero justo laoreet sit amet cursus. Aliquam ultrices sagittis orci a scelerisque. Posuere ac ut consequat semper viverra nam libero justo laoreet. Scelerisque in dictum non consectetur a erat nam at lectus.';
 
-const posts = [];
+// const posts = [];
 
 app.set('view engine', 'ejs');
 
@@ -46,9 +46,15 @@ app.use(
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.render('index', {
-    startingContent: homeStartingContent,
-    posts: posts
+  Post.find({}, (err, allPosts) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('index', {
+        startingContent: homeStartingContent,
+        posts: allPosts
+      });
+    }
   });
 });
 
@@ -59,27 +65,30 @@ app.get('/compose', (req, res) => {
 app.post('/compose', (req, res) => {
   const title = req.body.postTitle;
   const content = req.body.blogContent;
-  const post = {
+  const post = new Post({
     title: title,
     content: content
-  };
-  posts.push(post);
-  res.redirect('/');
+  });
+  post.save((err) => {
+    if (!err) {
+      res.redirect('/');
+    };
+  });
 });
 
-app.get('/posts/:postName', (req, res) => {
-  const requestedTitle = _.lowerCase(req.params.postTitle);
+app.get("/posts/:postId", function (req, res) {
 
-  posts.forEach(post => {
-    const loweredTitle = _.lowerCase(post.title);
+  const requestedPostId = req.params.postId;
 
-    if (loweredTitle === requestedTitle) {
-      res.render('post', {
-        content: post.content,
-        title: post.title
-      });
-    }
+  Post.findOne({
+    _id: requestedPostId
+  }, function (err, post) {
+    res.render("post", {
+      title: post.title,
+      content: post.content
+    });
   });
+
 });
 
 app.listen(3000, () => console.log('Server has started on port 3000'));
