@@ -6,3 +6,11 @@
     position: relative;
     left: 13px;
 }
+
+.blog-title {
+    margin-bottom: 0;
+}
+
+.jumbotron {
+    margin-top: 50px;
+}
