@@ -1,0 +1,8 @@
+.mx-auto {
+    text-align: center;
+}
+
+.card-row {
+    position: relative;
+    left: 13px;
+}

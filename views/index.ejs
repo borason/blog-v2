@@ -2,23 +2,23 @@
 <div class="row">
   <div class="col-1"></div>
   <div class="col-10">
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron jumbotron-fluid shadow p-3 mb-5 bg-white rounded">
       <div class="container">
-        <h1>Home</h1>
+        <h1 class="mx-auto">Home</h1>
         <p><%=startingContent%></p>
       </div>
     </div>
-    <div class="row">
+    <div class="row card-row">
       <% posts.forEach((post) => {%>
-      <div class="card bg-secondary border-warning mb-3" style="max-width: 20rem;">
+      <div class="card bg-secondary border-warning mb-3 shadow p-3 mb-5 bg-white rounded" style="max-width: 20rem;">
         <div class="card-header">
-          <h3><%=post.title%></h3>
+          <h3 class="mx-auto"><%=post.title%></h3>
         </div>
         <div class="card-body">
           <!-- <h4 class="card-title"></h4> -->
           <p class="card-text">
             <%if(post.content.length > 100) {%>
-            <%=post.content.slice(0, 100) + '...'%><a href="/posts/<%=post._id%>">Read More</a>
+            <%=post.content.slice(0, 100) + '...'%><a href="/posts/<%=post._id%>" class="text-info">Read More</a>
             <%} else{%>
             <%=post.content%>
             <%}%>
