@@ -7,7 +7,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 const app = express();
 
-mongoose.connect("mongodb://localhost:27017/blogDB", {
+mongoose.connect("mongodb+srv://admin_bora:Parker801@cluster0-dsp5c.mongodb.net/test?retryWrites=true&w=majority", {
   useNewUrlParser: true
 });
 
